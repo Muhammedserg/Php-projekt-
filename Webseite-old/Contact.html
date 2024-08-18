@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="DE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="main.js" defer></script>
+<title>Euphoric-Advanture</title>
+<style>
+    /* Stil für grüne und rote Nachrichten */
+    .valid {
+        color: green;
+    }
+
+    .invalid {
+        color: red;
+    }
+</style>
+</head>
+<body>
+<header>
+  <div class="container">
+    <a href="#" class="logo">
+      <img width="140px" src="imgs/onlinelogomaker-061423-0556-7995-500.jpg" alt="logo">
+    </a>
+    <nav>
+      <div class="header">
+        <div class="links">
+          <span class="icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </div>
+      </div>
+      <ul>
+        <li><a class="active" href="index.html">Home</a></li>
+        <li><a href="Culture-trips.html">Culture trips</a></li>
+        <li><a href="Blog.html">Blog</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="signup-login/login.php">login</a></li>
+      </ul>
+    </nav>
+    <div class="search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </div>
+  </div>
+</header>
+
+<section class="main-2">
+  <div class="container">
+    <h1>was suchen Sie</h1><br>
+    <h2>fragen ? <br> Gerne melden</h2> <br>
+    <a href="#" class="main-btn-2">Mehr infos</a>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="container">
+    <div class="main-heading">
+      <h2>Kontaktieren Sie uns</h2>
+      <p>Senden Sie uns einfach Ihre Anfrage.</p>
+    </div>
+    <div class="alert"></div>
+    <div class="content">
+        <form id="contact-form" action="https://formspree.io/f/meqyklkn" method="POST" novalidate>
+            <input class="main-input" type="text" name="first-name" placeholder="Vorname" />
+            <div class="message" id="first-name-message"></div>
+            
+            <input class="main-input" type="text" name="last-name" placeholder="Nachname" />
+            <div class="message" id="last-name-message"></div>
+            
+            <input class="main-input" type="email" name="mail" placeholder="Ihre Email" />
+            <div class="message" id="mail-message"></div>
+            
+            <input class="main-input" type="text" name="plz" placeholder="PLZ" />
+            <div class="message" id="plz-message"></div>
+            
+            <input class="main-input" type="text" name="address" placeholder="Adresse" />
+            <div class="message" id="address-message"></div>
+            
+            <input class="main-input" type="tel" name="phone" placeholder="Telefonnummer (optional)" />
+            <div class="message" id="phone-message"></div>
+            
+            <h3>Wie können wir Ihnen helfen?</h3>
+            <input class="main-input" type="text" name="subjekt" placeholder="Subjekt" />
+            <div class="message" id="subjekt-message"></div>
+            
+            <textarea class="main-input" name="message" placeholder="Ihre Nachricht"></textarea>
+            <div class="message" id="message-message"></div>
+            
+            <input type="submit" value="Nachricht senden" />
+        </form>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const form = document.getElementById("contact-form");
+    const firstNameInput = document.querySelector('input[name="first-name"]');
+    const lastNameInput = document.querySelector('input[name="last-name"]');
+    const emailInput = document.querySelector('input[name="mail"]');
+    const plzInput = document.querySelector('input[name="plz"]');
+    const addressInput = document.querySelector('input[name="address"]');
+    const phoneInput = document.querySelector('input[name="phone"]');
+    const subjektInput = document.querySelector('input[name="subjekt"]');
+    const messageInput = document.querySelector('textarea[name="message"]');
+    
+    form.addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        if (validateForm()) {
+            // Wenn das Formular gültig ist, senden Sie es
+            this.submit();
+        }
+    });
+    
+    function validateForm() {
+        let isValid = true;
+        
+        // Leeren Sie zuerst alle Fehlermeldungen
+        clearMessages();
+        
+        // Überprüfen Sie die Validierung jedes Feldes
+        if (!firstNameInput.value.trim()) {
+            isValid = false;
+            displayErrorMessage(firstNameInput, "Bitte geben Sie Ihren Vornamen ein.");
+        }
+        
+        if (!lastNameInput.value.trim()) {
+            isValid = false;
+            displayErrorMessage(lastNameInput, "Bitte geben Sie Ihren Nachnamen ein.");
+        }
+        
+        if (!emailInput.value.trim() || !isValidEmail(emailInput.value.trim())) {
+            isValid = false;
+            displayErrorMessage(emailInput, "Bitte geben Sie eine gültige E-Mail-Adresse ein.");
+        }
+        
+        if (!plzInput.value.trim()) {
+            isValid = false;
+            displayErrorMessage(plzInput, "Bitte geben Sie Ihre Postleitzahl ein.");
+        }
+        
+        if (!addressInput.value.trim()) {
+            isValid = false;
+            displayErrorMessage(addressInput, "Bitte geben Sie Ihre Adresse ein.");
+        }
+        
+        // Telefonnummer ist optional, aber wenn eingegeben, sollte es validiert werden
+        if (phoneInput.value.trim() && !isValidPhoneNumber(phoneInput.value.trim())) {
+            isValid = false;
+            displayErrorMessage(phoneInput, "Bitte geben Sie eine gültige Telefonnummer ein.");
+        }
+        
+        if (!subjektInput.value.trim()) {
+            isValid = false;
+            displayErrorMessage(subjektInput, "Bitte geben Sie das Betreff ein.");
+        }
+        
+        if (!messageInput.value.trim()) {
+            isValid = false;
+            displayErrorMessage(messageInput, "Bitte geben Sie Ihre Nachricht ein.");
+        }
+        
+        return isValid;
+    }
+    
+    function displayErrorMessage(inputField, message) {
+        const messageContainer = inputField.nextElementSibling;
+        messageContainer.textContent = message;
+        messageContainer.classList.add("invalid");
+    }
+    
+    function clearMessages() {
+        const messages = document.querySelectorAll(".message");
+        messages.forEach(function(message) {
+            message.textContent = "";
+            message.classList.remove("invalid");
+        });
+    }
+    
+    function isValidEmail(email) {
+        // Einfache Überprüfung der E-Mail-Adresse mit einem regulären Ausdruck
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    function isValidPhoneNumber(phoneNumber) {
+        // Überprüfung der Telefonnummer mit einem regulären Ausdruck
+        const phoneRegex = /^\+?(\d{1,3})?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})$/;
+        return phoneRegex.test(phoneNumber);
+    }
+});
+</script>
+
+</body>
+</html>
